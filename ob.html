@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script>
+    var app = document.getElementById('app')
+    function getData() {
+      fetch('http://192.168.42.83:8833/api_v2/data/', {
+        mode: 'cors'
+      })
+      .then(function(res) {
+        return res.json();
+      }).then(function(data) {
+        app.innerHTML = JSON.stringify(data);
+        getData();
+      })
+    }
+    getData();
+  </script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="ev"></div>
+  <script>
+    var data = {
+      absolute: 0,
+      alpha: 0,
+      beta: 0,
+      gamma: 0
+    };
+
+    var prevState = 'idle';
+
+    var app = ﻿document.getElementById('app');
+    var ev = document.getElementById('ev');
+
+    function handleOrientation(e) {
+      var state = 'idle';
+
+      var text = '';
+      text = text + e.absolute + '<br>';
+      text = text + e.alpha + '<br>';
+      text = text + e.beta + '<br>';
+      text = text + e.gamma + '<br>';
+      app.innerHTML = text;
+
+      if (e.gamma < 20) {
+        state = 'top';
+      } else if (e.gamma > 60) {
+        state = 'down';
+      } else {
+        state = 'idle';
+      }
+
+      if (prevState != state) {
+        prevState = state;
+        switch (prevState) {
+          case 'top':
+            ev.innerHTML += 'top<br>';
+            break;
+          case 'idle':
+            ev.innerHTML += 'idle<br>';
+            break;
+          case 'down':
+            ev.innerHTML += 'down<br>';
+            break;
+          default:
+            ev.innerHTML += 'Unknown<br>';
+            break;
+        }
+        fetch('http://192.168.42.83:8833/api_v2/update/direction/', {
+          method: 'post',
+          mode: 'cors',
+          body: JSON.stringify({ direction: state })
+        })
+      }
+    }
+
+    // window.setInterval(function() {
+    //   fetch('http://192.168.42.83:8833/api_v1/update/orientation/', {
+    //     method: 'post',
+    //     mode: 'cors',
+    //     body: JSON.stringify( data )
+    //   })
+    // }, 1000);
+
+    window.addEventListener("deviceorientation", handleOrientation);
+  </script>
+</body>
+</html>
