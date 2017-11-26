@@ -6,8 +6,8 @@ import os
 app = Bottle()
 
 state = {
-    'orientation': {},
-    'direction': ''
+    'directionData': {},
+    'colorQuestData': {}
 }
 
 @app.hook('after_request')
@@ -41,10 +41,21 @@ def update():
     global state
     try:
         data = parse.unquote(request.body.read().decode('utf-8'))
-        state['direction'] = json.loads(data)['direction']
+        state['directionData'] = json.loads(data)
     except:
         return { 'status': 'fail' }
     return { 'status': 'sccuess' }
+
+@app.post('/api_v2/update/color_quest/')
+def updateColorQuest():
+    global state
+    try:
+        data = parse.unquote(request.body.read().decode('utf-8'))
+        state['colorQuestData'] = json.loads(data)
+    except:
+        print ('updateColorQuest', 'fail')
+        return { 'status': 'fail' }
+    return { 'status': 'sccuess'}
 
 @app.get('/data/')
 def getData():
