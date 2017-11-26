@@ -61,6 +61,10 @@ def updateColorQuest():
 def getData():
     return state
 
+@app.get('/api_v2/init_data/')
+def getInitData():
+    return state
+
 @app.get('/api_v2/data/')
 def getDataV2():
     global state
