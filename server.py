@@ -7,7 +7,8 @@ app = Bottle()
 
 state = {
     'directionData': {},
-    'colorQuestData': {}
+    'colorQuestData': {},
+    'tempoData': {}
 }
 
 @app.hook('after_request')
@@ -54,6 +55,17 @@ def updateColorQuest():
         state['colorQuestData'] = json.loads(data)
     except:
         print ('updateColorQuest', 'fail')
+        return { 'status': 'fail' }
+    return { 'status': 'sccuess'}
+
+@app.post('/api_v2/update/tempo/')
+def updateTempo():
+    global state
+    try:
+        data = parse.unquote(request.body.read().decode('utf-8'))
+        state['tempoData'] = json.loads(data)
+    except:
+        print ('tempoData', 'fail')
         return { 'status': 'fail' }
     return { 'status': 'sccuess'}
 
