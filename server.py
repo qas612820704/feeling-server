@@ -1,4 +1,5 @@
 from bottle import Bottle, post, request, response
+from urllib import parse
 import json
 import os
 
@@ -39,7 +40,7 @@ def updateOrientation():
 def update():
     global state
     try:
-        data = request.body.read().decode('utf-8')
+        data = parse.unquote(request.body.read().decode('utf-8'))
         state['direction'] = json.loads(data)['direction']
     except:
         return { 'status': 'fail' }
